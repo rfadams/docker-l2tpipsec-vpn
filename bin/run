@@ -1,8 +1,10 @@
 #!/bin/sh
 set -e
 
+stop-redirects
+
 # Get ip addy of docker container
-IP_ADDR=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}')
+IP_ADDR=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}' | head -n1)
 echo $IP_ADDR
 
 # Update IP ADDRESS inside IPSEC config files
@@ -13,4 +15,6 @@ cat /etc/ipsec.secrets
 
 # Start IPSec
 service ipsec restart
+service xl2tpd restart
+sleep 3
 ipsec verify
