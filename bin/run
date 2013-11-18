@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+
+IP_ADDR=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}')
+echo $IP_ADDR
+perl -pi -e 's/YOUR.SERVER.IP.ADDRESS/'$IP_ADDR'/' /etc/ipsec.conf
+perl -pi -e 's/YOUR.SERVER.IP.ADDRESS/'$IP_ADDR'/' /etc/ipsec.secrets
+cat /etc/ipsec.conf
+cat /etc/ipsec.secrets
+service ipsec restart
+# ipsec verify
