@@ -6,9 +6,7 @@ RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get install -y curl 
 
-RUN apt-get install -y iptables ufw
-
-RUN apt-get install -y openswan xl2tpd lsof
+RUN apt-get install -y openswan xl2tpd lsof iptables
 
 ADD ipsec.conf /etc/ipsec.conf
 ADD ipsec.secrets /etc/ipsec.secrets
@@ -18,23 +16,13 @@ RUN bash stop-redirects
 
 EXPOSE 500/udp 4500/udp
 
-RUN mkdir -p /lib/modules/3.8.0-33-generic
+# Some modules were not found, needed to create dir first
+RUN mkdir -p /lib/modules/3.8.0-33-generic 
+
+# Creates modules that resolved a problem with ipsec
 RUN depmod -a
 
-RUN apt-get install -y vim nano netcat nmap net-tools
-
-RUN curl -L http://git.io/portserver > /usr/local/sbin/portserver.py
-RUN chmod 744 /usr/local/sbin/portserver.py
+# Various tools to help with network debugging (will be removed upon success)
+RUN apt-get install -y vim netcat nmap net-tools
 
 CMD run
-
-# RUN ipsec verify
-
-
-# RUN curl -L http://git.io/portserver > portserver.py
-# EXPOSE 10000
-# CMD ["python", "portserver.py"]
-
-
-# Was writing bash script to replace YOUR.IP.ADDRESS with current one
-

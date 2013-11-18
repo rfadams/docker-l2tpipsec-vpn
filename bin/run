@@ -1,12 +1,16 @@
 #!/bin/sh
 set -e
 
-
+# Get ip addy of docker container
 IP_ADDR=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}')
 echo $IP_ADDR
+
+# Update IP ADDRESS inside IPSEC config files
 perl -pi -e 's/YOUR.SERVER.IP.ADDRESS/'$IP_ADDR'/' /etc/ipsec.conf
 perl -pi -e 's/YOUR.SERVER.IP.ADDRESS/'$IP_ADDR'/' /etc/ipsec.secrets
 cat /etc/ipsec.conf
 cat /etc/ipsec.secrets
+
+# Start IPSec
 service ipsec restart
-# ipsec verify
+ipsec verify
