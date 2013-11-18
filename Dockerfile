@@ -4,9 +4,16 @@ FROM ubuntu:12.04
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y curl 
+RUN apt-get install -y curl wget 
 
-RUN apt-get install -y openswan xl2tpd lsof iptables ufw
+# IPSec / L2TP 
+RUN apt-get install -y openswan xl2tpd 
+
+# Identified dependencies for IPSec / L2TP
+RUN apt-get install -y lsof iptables ufw
+
+# Debugging tools
+RUN apt-get install -y vim netcat nmap net-tools
 
 ADD ipsec.conf /etc/ipsec.conf
 ADD ipsec.secrets /etc/ipsec.secrets
@@ -21,8 +28,5 @@ RUN mkdir -p /lib/modules/3.8.0-33-generic
 
 # Creates modules that resolved a problem with ipsec
 RUN depmod -a
-
-# Various tools to help with network debugging (will be removed upon success)
-RUN apt-get install -y vim netcat nmap net-tools
 
 CMD run
