@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get install -y curl 
 
-RUN apt-get install -y openswan xl2tpd lsof iptables
+RUN apt-get install -y openswan xl2tpd lsof iptables ufw
 
 ADD ipsec.conf /etc/ipsec.conf
 ADD ipsec.secrets /etc/ipsec.secrets
