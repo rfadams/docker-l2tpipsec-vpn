@@ -18,3 +18,9 @@ service ipsec restart
 service xl2tpd restart
 sleep 3
 ipsec verify
+
+# Keep the container running
+while [ true ]; do
+    echo "ipsec working"
+    sleep 60
+done
